@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weighted Decision Matrix Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="number"] {
+            width: 50px;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 100px;
+            text-align: center;
+        }
+
+        #result {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weighted Decision Matrix Calculator</h1>
+    
+    <label for="numCriteria">Number of Criteria:</label>
+    <input type="number" id="numCriteria" value="2">
+    
+    <label for="numOptions">Number of Options:</label>
+    <input type="number" id="numOptions" value="2">
+    
+    <button onclick="generateMatrix()">Generate Matrix</button>
+    
+    <div id="matrix-container"></div>
+    
+    <button onclick="calculateMatrix()">Calculate</button>
+    <div id="result"></div>
+
+    <script>
+    
+        function generateMatrix()
+         {
+            const numCriteria = parseInt(document.getElementById("numCriteria").value);
+            const numOptions = parseInt(document.getElementById("numOptions").value);
+
+            if (isNaN(numCriteria) || isNaN(numOptions)) {
+                alert("Please enter valid numbers for criteria and options.");
+                return;
+            }
+
+            const matrixContainer = document.getElementById("matrix-container");
+
+            let matrixHTML = '<table><thead><tr><th>Criteria</th><th>Weight</th>';
+            for (let i = 1; i <= numOptions; i++) {
+                matrixHTML += `<th><input type="text" class="option" value="Option ${i}"></th>`;
+            }
+            matrixHTML += '</tr></thead><tbody>';
+
+            for (let i = 1; i <= numCriteria; i++) {
+                matrixHTML += `<tr><td><input type="text" class="criteria" value="Criteria ${i}"></td><td><input type="number" class="weight" value="1"></td>`;
+                for (let j = 1; j <= numOptions; j++) {
+                    matrixHTML += `<td><input type="number" class="option_value" value="0"></td>`;
+                }
+                matrixHTML += '</tr>';
+            }
+
+            matrixHTML += '</tbody></table>';
+            matrixContainer.innerHTML = matrixHTML;
+        }
+        
+        
+        function calculateMatrix() {
+    const criteria = document.querySelectorAll('.criteria');
+    const weights = document.querySelectorAll('.weight');
+    const options = document.querySelectorAll('.option');
+    const optionValues = document.querySelectorAll('.option_value');
+    const numOptions = parseInt(document.getElementById("numOptions").value);
+
+    const optionScores = new Array(numOptions).fill(0);
+    const optionNames = [];
+
+    // Extract option names
+    options.forEach(option => {
+        optionNames.push(option.value);
+    });
+
+    criteria.forEach((criterion, index) => {
+        const weightValue = parseFloat(weights[index].value);
+
+        optionValues.forEach((optionValue, i) => {
+            const optionNumericValue = parseFloat(optionValue.value);
+            optionScores[i] += weightValue * optionNumericValue;
+        });
+    });
+
+    const resultElement = document.getElementById("result");
+    let resultHTML = '';
+
+    // Display option names and scores
+    for (let i = 0; i < numOptions; i++) {
+        resultHTML += `${optionNames[i]} Score: ${optionScores[i]}<br>`;
+    }
+
+    resultElement.innerHTML = resultHTML;
+}
+
+
+        
+    </script>
+</body>
+</html>
