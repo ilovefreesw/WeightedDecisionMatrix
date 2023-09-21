@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision Table Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+        }
+
+        #decision-table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #decision-table th, #decision-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        #decision-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Decision Table Generator</h1>
+        <form id="decision-form">
+            <div>
+                <label for="conditions">Conditions (comma-separated):</label>
+                <input type="text" id="conditions" required>
+            </div>
+            <div>
+                <label for="options">Options (comma-separated):</label>
+                <input type="text" id="options" required>
+            </div>
+            <button type="button" onclick="generateTable()">Generate Decision Table</button>
+        </form>
+
+        <h2>Decision Table:</h2>
+        <table id="decision-table">
+            <!-- The table will be generated here -->
+        </table>
+    </div>
+
+    <script>
+        function generateTable() {
+            const conditions = document.getElementById("conditions").value.split(",");
+            const options = document.getElementById("options").value.split(",");
+
+            const table = document.getElementById("decision-table");
+            table.innerHTML = "";
+
+            // Create the table header
+            const headerRow = table.insertRow();
+            const headerCell = headerRow.insertCell();
+            headerCell.innerHTML = "Conditions \\ Options";
+
+            for (const option of options) {
+                const optionHeaderCell = headerRow.insertCell();
+                optionHeaderCell.innerHTML = option;
+            }
+
+            // Create the table body
+            for (const condition of conditions) {
+                const row = table.insertRow();
+                const conditionCell = row.insertCell();
+                conditionCell.innerHTML = condition;
+
+                for (const option of options) {
+                    const cell = row.insertCell();
+                    cell.innerHTML = `<input type="checkbox" name="${condition}_${option}">`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
